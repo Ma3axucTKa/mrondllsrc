@@ -267,8 +267,8 @@ __int64 LUI_CoD_LuaCall_MarkLocalized(uintptr_t luaVM)
 	if (lua_isstring(luaVM, 1))
 	{
 		v3 = lua_tolstring(luaVM, 1, 0);
-		if (strstr(v3, "Dev Cheat Enabled. ")) {
-			lua_pushstring(luaVM, "Welcome to MRON");
+		if (strstr(v3, "Dev Cheat Enabled -")) {
+			lua_pushstring(luaVM, "^2Welcome to MRON");
 		}
 		else {
 			v4 = va((char*)0x14259EEDC_g, v3);
