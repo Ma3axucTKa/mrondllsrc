@@ -170,7 +170,6 @@
     <ClCompile Include="discord.cpp" />
     <ClCompile Include="dvar.cpp" />
     <ClCompile Include="fastfile.cpp" />
-    <ClCompile Include="font.cpp" />
     <ClCompile Include="functions.cpp" />
     <ClCompile Include="assets.cpp" />
     <ClCompile Include="gamemode.cpp" />
@@ -218,7 +217,6 @@
     <ClInclude Include="discord_rpc.h" />
     <ClInclude Include="dvar.h" />
     <ClInclude Include="fastfile.h" />
-    <ClInclude Include="font.hpp" />
     <ClInclude Include="functions.hpp" />
     <ClInclude Include="gamemode.h" />
     <ClInclude Include="game_inc.h" />

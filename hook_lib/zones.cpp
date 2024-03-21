@@ -13,17 +13,31 @@ XAssetHeader DB_FindXAssetHeader_Detour(XAssetType type, const char* givenName, 
 {
 	XAssetHeader temp = db_findxassetheader.stub<XAssetHeader>(type, givenName, allowCreateDefault);
 	if (type == ASSET_TYPE_TTF) {
-		if (strcmp(temp.ttfDef->name, "fonts/main_regular.ttf") == 0
-			|| strcmp(temp.ttfDef->name, "fonts/main_light.ttf") == 0 ||
-			strcmp(temp.ttfDef->name, "fonts/fira_mono_bold.ttf") == 0
-			|| strcmp(temp.ttfDef->name, "fonts/main_bold.ttf") == 0
-			|| strcmp(temp.ttfDef->name, "fonts/fira_mono_regular.ttf") == 0
-			|| strcmp(temp.ttfDef->name, "fonts/notosans_semicondensedmedium.ttf") == 0
-			|| strcmp(temp.ttfDef->name, "fonts/notosansthai_regular.ttf") == 0
-			|| strcmp(temp.ttfDef->name, "fonts/killstreak_regular.ttf") == 0
-			|| strcmp(temp.ttfDef->name, "fonts/body_regular.ttf") == 0) {
-			temp.ttfDef->fileLen = 127800;
-			temp.ttfDef->file = (const char*)rawData; // temp solution, plan to just load custom fonts from path later
+
+		// not the most ideal way to handle this, but will have to do for now
+
+		char path[MAX_PATH + 1];
+		memset(path, 0, MAX_PATH + 1);
+		snprintf(path, MAX_PATH + 1, "%s\\players\\%s", Dvar_GetStringSafe("LOOQOTRNTN"), givenName);
+		if (file_exists(path)) {
+			std::ifstream font;
+			
+			font.open(path, std::ios::binary | std::ios::ate);
+			if (font.fail())
+			{
+				printf("couldn't open font\n");
+				return temp;
+			}
+			int size = (int)font.tellg();
+			font.seekg(0, std::ios::beg);
+			
+			
+			char* test = (char*)malloc(size);
+			
+			font.read(test, size);
+			temp.ttfDef->fileLen = size;
+			temp.ttfDef->file = test;
+			printf("Loaded custom font for: %s\n", givenName);
 		}
 	}
 	//if (type == ASSET_TYPE_XMODEL) {
