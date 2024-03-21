@@ -142,7 +142,8 @@ void UpdateSettings() {
 
 void R_EndFrame_Detour()
 {
-	if (strcmp(Dvar_GetStringSafe("NSQLTTMRMP"), "mp_donetsk") == 0)
+	dvar_t* sv_running = Dvar_FindVarByName("sv_running"); // host check, allows clients to run at max fps if they aren't host on verdansk
+	if (strcmp(Dvar_GetStringSafe("NSQLTTMRMP"), "mp_donetsk") == 0 && sv_running->current.enabled)
 	{
 		*reinterpret_cast<int*>(0x14E385A68_g) = 71;
 		*reinterpret_cast<int*>(0x14E385A78_g) = 71;
@@ -181,7 +182,7 @@ void R_EndFrame_Detour()
 			*(DWORD*)(bnet_class + 0x2F4) = 0x795230F0;
 			*(DWORD*)(bnet_class + 0x2FC) = 0;
 			*(BYTE*)(bnet_class + 0x2F8) = 31;
-
+			SEH_InitLocalize(); // init localize search
 			printf("LOADED!\n");
 			bFinished = true;
 		}
@@ -398,7 +399,7 @@ void patchGame()
 	utils::hook::set<byte>(0x141101946_g, 0xEB);
 
 	// enable friction dvar
-	utils::hook::set(0x14112141E_g, (int8_t)2);
+	utils::hook::set<int8_t>(0x14112141E_g, 2);
 
 	// remove FF Header version check
 	// utils::hook::set<byte>(0x1411A776B_g, 0xEB);

@@ -18,6 +18,7 @@
 #include "structs.h"
 #include "assets.h"
 #include "functions.hpp"
+#include "font.hpp"
 
 #include "ini.h"
 #include "json.hpp"
