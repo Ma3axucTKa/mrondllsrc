@@ -316,18 +316,18 @@ bool CheatsOk(int entNum) {
 void Cmd_Noclip_f(int entNum)
 {
 	SvClient* ms_clients = *reinterpret_cast<SvClient**>(0x14E17F690_g + (8 * entNum));
-	uintptr_t client = g_entities[entNum].get<uintptr_t>(0x150);
+	gclient_s* client = g_entities[entNum].client;
 	if (client) {
-		int v6 = *reinterpret_cast<int*>(client + 0x5DD0);
-		if ((*reinterpret_cast<int*>(client + 0x5DD0) & 1) != 0) {
-			v6 = *reinterpret_cast<int*>(client + 0x5DD0) & 0xFFFFFFFE;
+		int v6 = client->flags;
+		if ((client->flags & 1) != 0) {
+			v6 = client->flags & 0xFFFFFFFE;
 			ms_clients->SendServerCommand(1, "f \"Noclip: ^1OFF\"");
 		}
 		else {
-			v6 = *reinterpret_cast<int*>(client + 0x5DD0) | 1;
+			v6 = client->flags | 1;
 			ms_clients->SendServerCommand(1, "f \"Noclip: ^2ON\"");
 		}
-		*reinterpret_cast<int*>(client + 0x5DD0) = v6;
+		client->flags = v6;
 	}
 }
 
@@ -496,7 +496,7 @@ void SV_ClientMP_SpawnBotOrTestClient(short* entity)
 
 uintptr_t G_GetEntityPlayerState(gentity_s* ent)
 {
-	uintptr_t cl = ent->client;
+	uintptr_t cl = (uintptr_t)ent->client;
 
 	// return &cl->ps;
 	return cl; // client + 0x0 = playerstate
@@ -544,6 +544,11 @@ const char* GetGametypeName(const char* gameType) {
 	if (!gametypeinfo) return "Unknown Mode";
 	if (gametypeinfo->gameTypeName[0] == 31) return "error";
 	return SEH_StringEd_GetString(gametypeinfo->gameTypeName);
+}
+
+int CL_GetClientName(LocalClientNum_t localClientNum, int index, char* buf, __int64 bufSize) {
+	auto func = reinterpret_cast<int(*)(LocalClientNum_t, int, char*, __int64)>(0x1415F98E0_g);
+	return func(localClientNum, index, buf, bufSize);
 }
 
 #pragma endregion
