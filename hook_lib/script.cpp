@@ -35,7 +35,7 @@ void Load_ScriptFile_Detour(int streamStart)
 
 	backup = *varConstChar;
 
-	printf("Loading scriptfile '%s' into database\n", scriptfile->name);
+	//printf("Loading scriptfile '%s' into database\n", scriptfile->name);
 	std::string filepath = "script.gscbin";
 	bool scriptgscbin = false;
 
@@ -201,4 +201,15 @@ void ProcessScriptFile(void* scrContext, ScriptFile* scriptfile)
 	}
 
 	process_script_file.stub<void>(scrContext, scriptfile);
+}
+
+void G_MainMP_LogPrintf(const char* fmt, ...) {
+	char* msg = (char*)(0x14D392B70_g);
+	va_list va;
+	auto Com_PrintMessageInternal = reinterpret_cast<void(*)(int, const char*, int)>(0x1412B0660_g);
+	auto Com_vsprintf_truncate = reinterpret_cast<void(*)(char*, __int64, __int64, const char*, char*)>(0x1420366B0_g);
+	va_start(va, fmt);
+	Com_vsprintf_truncate(msg, 0x4000, 0x4000, fmt, va);
+	printf("%s\n", msg);
+	Com_PrintMessageInternal(0, msg, 0);
 }

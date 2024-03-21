@@ -269,5 +269,7 @@ const char* GetMapName(const char* mapName);
 gameTypeInfo* Com_GameInfo_GetGameTypeForInternalName(const char* mapName);
 
 const char* GetGametypeName(const char* gameType);
+enum LocalClientNum_t;
+int CL_GetClientName(LocalClientNum_t localClientNum, int index, char* buf, __int64 bufSize);
 
 #pragma endregion

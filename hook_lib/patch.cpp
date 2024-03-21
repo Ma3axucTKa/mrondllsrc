@@ -285,6 +285,7 @@ __int64 LUI_CoD_LuaCall_MarkLocalized(uintptr_t luaVM)
 
 void hooks()
 {
+	utils::hook::jump(0x14121E470_g, G_MainMP_LogPrintf); // logs prints from the logprint function in gsc
 	// 3.0 stuff
 	utils::hook::jump(0x1415C8DE0_g, ActivisionClanTagAllowed);
 	utils::hook::jump(0x141BA1E80_g, UI_VerifyString);

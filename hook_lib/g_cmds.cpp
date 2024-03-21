@@ -27,6 +27,12 @@ void addCustomCmds()
 	Cmd_AddCommandInternal("loadmzsdef", Cmd_MZSDef_Load_f, &load_mzsdef_f_VAR);
 }
 
+void LogPlayerEvent(int clientNum, const char* msg) {
+	char buff[48];
+	CL_GetClientName(LOCAL_CLIENT_0, clientNum, buff, 48);
+	printf("[SERVER LOG] - Client %d - %s: %s\n", clientNum, buff, msg);
+}
+
 void G_CmdsMP_ClientCommand_Detour(int clientNum)
 {
 	g_entities = *reinterpret_cast<gentity_s**>(0x14BC20F00_g);
@@ -40,6 +46,7 @@ void G_CmdsMP_ClientCommand_Detour(int clientNum)
 		if (strcmp(command, "noclip") == 0) {
 			if (CheatsOk(clientNum)) {
 				Cmd_Noclip_f(clientNum);
+				LogPlayerEvent(clientNum, "Used NoClip!");
 			}
 			return;
 		}
@@ -56,6 +63,7 @@ void G_CmdsMP_ClientCommand_Detour(int clientNum)
 						G_Items_AddAmmo(client, &weap, 0, 9999, 1);
 						G_Weapon_SelectWeapon(clientNum, &weap);
 					}
+					LogPlayerEvent(clientNum, "Given weapon!");
 				}
 			}
 		}
@@ -78,6 +86,7 @@ void G_CmdsMP_ClientCommand_Detour(int clientNum)
 						G_Items_AddAmmo(client, &weap, 0, 9999, 1);
 						G_Weapon_SelectWeapon(clientNum, &weap);
 					}
+					LogPlayerEvent(clientNum, "Given akimbo weapon!");
 				}
 			}
 		}
@@ -89,6 +98,7 @@ void G_CmdsMP_ClientCommand_Detour(int clientNum)
 				Scr_AddString(ctx, command);
 
 				Scr_FreeThread(ctx, GScr_ExecEntThread(&g_entities[clientNum], 0x1B65FC, 1));
+				LogPlayerEvent(clientNum, "Given killstreak!");
 			}
 		}
 		if (strcmp(command, "bold_msg") == 0) {
@@ -101,6 +111,7 @@ void G_CmdsMP_ClientCommand_Detour(int clientNum)
 						snprintf(msgbuf, 500, "g \"%s\"", command);
 						ms_clients->SendServerCommand(1, msgbuf);
 					}
+					LogPlayerEvent(clientNum, "Sent Bold Message");
 				}
 			}
 		}
@@ -125,6 +136,7 @@ void G_CmdsMP_ClientCommand_Detour(int clientNum)
 						ms_clients->SendServerCommand(1, "g \"Death barriers removed!\"");
 					}
 				}
+				LogPlayerEvent(clientNum, "Removed barriers!");
 			}
 		}
 
@@ -193,17 +205,12 @@ void G_CmdsMP_ClientCommand_Detour(int clientNum)
 					float y = strToFloat(yBuf);
 					float z = strToFloat(zBuf);
 
-					struct gclient_s
-					{
-						char __padding[0x30];
-						float coords[3];
-					};
 					g_entities = *reinterpret_cast<gentity_s**>(0x14BC20F00_g);
 
-					gclient_s* host = (gclient_s*)g_entities[0].client;
-					host->coords[0] = x;
-					host->coords[1] = y;
-					host->coords[2] = z;
+					gclient_s* host = g_entities[0].client;
+					host->ps.origin[0] = x;
+					host->ps.origin[1] = y;
+					host->ps.origin[2] = z;
 				}
 			}
 		}

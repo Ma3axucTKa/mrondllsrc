@@ -45,7 +45,7 @@ BOOL WINAPI DllMain(HMODULE hModule, DWORD Reason, LPVOID lpVoid)
 		FILE* Dummy;
 		freopen_s(&Dummy, "CONOUT$", "w", stdout);
 		freopen_s(&Dummy, "CONIN$", "r", stdin);
-		SetConsoleTitleA("Donetsk Client Console");
+		SetConsoleTitleA("MRON Client");
 
 		utils::nt::library game{};
 		utils::nt::library user32("user32.dll");
@@ -55,7 +55,7 @@ BOOL WINAPI DllMain(HMODULE hModule, DWORD Reason, LPVOID lpVoid)
 
 		va = (const char* (*)(const char*, ...))0x1413F3010_g; //j_va
 
-		printf("Base Address: %p\n", 0_b);
+		//printf("Base Address: %p\n", 0_b);
 
 		// prevents tact error E_REPAIR (28) from happening
 		remove("Data/data/CASCRepair.mrk");
@@ -64,7 +64,7 @@ BOOL WINAPI DllMain(HMODULE hModule, DWORD Reason, LPVOID lpVoid)
 		addCustomCmds();
 		patchGame();
 
-		printf("Website: donetsk.live\n");
+		//printf("Website: donetsk.live\n");
 
 		cmd_args = (CmdArgs*)(0x14D20CBD0_g);
 

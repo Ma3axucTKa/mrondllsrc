@@ -83,7 +83,7 @@ const char* DB_GetRawBufferInflate_Detour(const char* file, char* buffer, int le
 		strcpy(buffer, filecontents.c_str());
 		return filecontents.c_str();;
 	}
-	printf("loading %s\n", file);
+	//printf("loading %s\n", file);
 	return db_getrawbufferinflate.stub<const char*>(file, buffer, length);
 }
 
@@ -131,7 +131,7 @@ void Load_MapEntsAsset_Detour(XAssetHeader* mapEnts)
 		}
 	}
 
-	printf("%s\n", mapEnts->mapEnts->clientTrigger.triggerString);
+	//printf("%s\n", mapEnts->mapEnts->clientTrigger.triggerString);
 
 	load_mapentsasset.stub<void>(mapEnts);
 }

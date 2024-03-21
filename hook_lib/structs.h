@@ -652,6 +652,99 @@ struct __declspec(align(8)) ClActiveClient
 	}
 };
 
+enum QueuedActionState
+{
+	QAS_STATE_NONE = 0x0,
+	QAS_STATE_FIRE = 0x1,
+	QAS_STATE_FIRE_ALT = 0x2,
+	QAS_STATE_MELEE = 0x3,
+	QAS_STATE_MELEE_ALT = 0x4,
+	QAS_STATE_BALL_PASS = 0x5,
+	QAS_INSPECT = 0x6,
+	QAS_STATE_MAX = 0x7,
+};
+
+struct PlayerActiveWeaponState
+{
+	int prevWeapAnim;
+	int weapAnim;
+	int weaponPrevFireTime;
+	int weaponFireTime;
+	int nextFireTimeCounter;
+	int weaponTime;
+	int weaponDelay;
+	int weaponStartingKickTime;
+	int weaponEndingKickTime;
+	int weaponState;
+	int weapHandFlags;
+	int weaponFrameTimeRemainder;
+	int rechamberNextFireTime;
+	unsigned int weaponShotCount;
+	unsigned int meleeHitCount;
+	unsigned int ammoInClipBeforeReload;
+	int weaponChargeAmount;
+	int weaponChargeCooldownTime;
+	int weaponFiredAtMaxCharge;
+	QueuedActionState queuedActionState;
+};
+
+struct BgWeaponHandle
+{
+	unsigned int m_mapEntryId;
+};
+
+enum WeaponSlot
+{
+	WEAPON_SLOT_NONE = 0x0,
+	WEAPON_SLOT_PRIMARY = 0x1,
+	WEAPON_SLOT_HEAVY = 0x2,
+	WEAPON_SLOT_MELEE = 0x3,
+	WEAPON_SLOT_EXECUTION = 0x4,
+	WEAPON_SLOT_ACCESSORY = 0x5,
+	WEAPON_SLOT_NUM = 0x6,
+};
+
+struct PlayerEquippedWeaponState
+{
+	bool usedBefore;
+	bool dualWielding;
+	bool inAltMode;
+	char pad_0003[1];
+	int zoomLevelIndex;
+	bool thermalEnabled;
+	bool hybridScope;
+	char pad_000A[2];
+	int8_t offHandSlot;
+	char pad_000D[3];
+	WeaponSlot slot;
+};
+
+struct playerState_s {
+	
+	char pad_0000[48];
+	float origin[3]; 
+	float velocity[3]; 
+	char pad_0048[388];
+	float viewangles[3]; 
+	char pad_01D8[116]; 
+	int32_t stats[5]; 
+	char pad_0260[684]; 
+	PlayerActiveWeaponState weapState[2]; 
+	BgWeaponHandle weaponsEquipped[15]; 
+	PlayerEquippedWeaponState weapEquippedData[15]; 
+	char pad_0714[15088];
+};
+
+struct gclient_s {
+	playerState_s ps;
+	char _padding[7116];
+	int flags;
+};
+
+struct sentient_s
+{
+};
+
 struct gentity_s : class_helper {
 	__int16 s_number;
 	unsigned __int8 field_2;
@@ -965,15 +1058,9 @@ struct gentity_s : class_helper {
 	unsigned __int8 field_14D;
 	unsigned __int8 field_14E;
 	unsigned __int8 field_14F;
-	uintptr_t client;
-	unsigned __int8 field_158;
-	unsigned __int8 field_159;
-	unsigned __int8 field_15A;
-	unsigned __int8 field_15B;
-	unsigned __int8 field_15C;
-	unsigned __int8 field_15D;
-	unsigned __int8 field_15E;
-	unsigned __int8 field_15F;
+	//entityShared_t r;
+	gclient_s* client;
+	sentient_s* sentient;
 	unsigned __int8 field_160;
 	unsigned __int8 field_161;
 	unsigned __int8 field_162;
@@ -1018,8 +1105,15 @@ struct gentity_s : class_helper {
 	unsigned __int8 field_199;
 	unsigned __int8 field_19A;
 	unsigned __int8 field_19B;
-	int spawnflags;
-	unsigned int m_flags[2];
+	int spawnflags; // 1B8
+	unsigned __int8 field_1A0;
+	unsigned __int8 field_1A1;
+	unsigned __int8 field_1A2;
+	unsigned __int8 field_1A3;
+	unsigned __int8 field_1A4;
+	unsigned __int8 field_1A5;
+	unsigned __int8 field_1A6;
+	unsigned __int8 field_1A7;
 	unsigned __int8 field_1A8;
 	unsigned __int8 field_1A9;
 	unsigned __int8 field_1AA;
@@ -1036,11 +1130,8 @@ struct gentity_s : class_helper {
 	unsigned __int8 field_1B5;
 	unsigned __int8 field_1B6;
 	unsigned __int8 field_1B7;
-	int field_1B8;
-	unsigned __int8 field_1BC;
-	unsigned __int8 field_1BD;
-	unsigned __int8 field_1BE;
-	unsigned __int8 field_1BF;
+	int health;
+	int maxHealth;
 	unsigned __int8 field_1C0;
 	unsigned __int8 field_1C1;
 	unsigned __int8 field_1C2;
@@ -2026,7 +2117,7 @@ struct gentity_s : class_helper {
 	unsigned __int8 field_59D;
 	unsigned __int8 field_59E;
 	unsigned __int8 field_59F;
-};
+	};
 
 typedef enum StatsSource {
 	STATS_ONLINE = 0,
@@ -2148,5 +2239,14 @@ struct Camo
 	//char blendMapChannels;
 	//FxCombinedDef vehVfxTailLight;
 	//FxCombinedDef vehVfxDoorSmoke;
+};
+
+enum LocalClientNum_t
+{
+	LOCAL_CLIENT_INVALID = 0xFFFFFFFF,
+	LOCAL_CLIENT_0 = 0x0,
+	LOCAL_CLIENT_1 = 0x1,
+	LOCAL_CLIENT_LAST = 0x1,
+	LOCAL_CLIENT_COUNT = 0x2,
 };
 
