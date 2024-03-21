@@ -49,7 +49,16 @@ const char* SEH_StringEd_GetString_Detour(const char* pszReference)
 		return "^1CHANGE MAP! DOESNT WORK";
 	}
 
-	if (strstr(pszReference, "MENU/CAMPAIGN"))
+	// searches for custom localize entries
+	auto keyExists = localizeMap.find(pszReference);
+	if (keyExists == localizeMap.end()) {
+		return ret;
+	}
+	else {
+		return keyExists->second.c_str();
+	}
+
+	/*if (strstr(pszReference, "MENU/CAMPAIGN"))
 	{
 		return "^3Campaign is not available in this build of the game.";
 	}
@@ -211,7 +220,25 @@ const char* SEH_StringEd_GetString_Detour(const char* pszReference)
 	if (strstr(pszReference, "MP/BR_TYPE_AR_3BURST"))
 	{
 		return "^9High-firerate AR with extra damage";
-	}
+	}*/
 
 	return ret;
+}
+
+std::unordered_map<std::string, std::string> localizeMap;
+void SEH_InitLocalize() {
+	char path[MAX_PATH + 1];
+	strcpy(path, Dvar_GetStringSafe("fs_homepath"));
+	strcat(path, "\\players\\localize.json");
+	if (file_exists(path)) {
+		printf("INSERTING LOCALIZE\n");
+		std::ifstream jsonPath(path);
+		nlohmann::json localizeJson = nlohmann::json::parse(jsonPath);
+		for (nlohmann::json::iterator it = localizeJson.begin(); it != localizeJson.end(); ++it) {
+			localizeMap.insert({ it.key(), it.value().get<std::string>() });
+		}
+	}
+	else {
+		printf("localize.json not found!\n");
+	}
 }

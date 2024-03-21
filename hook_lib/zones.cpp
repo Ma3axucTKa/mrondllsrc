@@ -12,7 +12,20 @@ __int64 DB_Zones_PerformZoneLoad_Detour(bool processingPreloadedFiles, bool isBa
 XAssetHeader DB_FindXAssetHeader_Detour(XAssetType type, const char* givenName, int allowCreateDefault)
 {
 	XAssetHeader temp = db_findxassetheader.stub<XAssetHeader>(type, givenName, allowCreateDefault);
-
+	if (type == ASSET_TYPE_TTF) {
+		if (strcmp(temp.ttfDef->name, "fonts/main_regular.ttf") == 0
+			|| strcmp(temp.ttfDef->name, "fonts/main_light.ttf") == 0 ||
+			strcmp(temp.ttfDef->name, "fonts/fira_mono_bold.ttf") == 0
+			|| strcmp(temp.ttfDef->name, "fonts/main_bold.ttf") == 0
+			|| strcmp(temp.ttfDef->name, "fonts/fira_mono_regular.ttf") == 0
+			|| strcmp(temp.ttfDef->name, "fonts/notosans_semicondensedmedium.ttf") == 0
+			|| strcmp(temp.ttfDef->name, "fonts/notosansthai_regular.ttf") == 0
+			|| strcmp(temp.ttfDef->name, "fonts/killstreak_regular.ttf") == 0
+			|| strcmp(temp.ttfDef->name, "fonts/body_regular.ttf") == 0) {
+			temp.ttfDef->fileLen = 127800;
+			temp.ttfDef->file = (const char*)rawData; // temp solution, plan to just load custom fonts from path later
+		}
+	}
 	//if (type == ASSET_TYPE_XMODEL) {
 	//	if (strcmp(temp.model->name, "head_mp_western_ghost_1_1") == 0) {
 	//		return db_findxassetheader.stub<XAssetHeader>(type, "head_opforce_juggernaut", allowCreateDefault);

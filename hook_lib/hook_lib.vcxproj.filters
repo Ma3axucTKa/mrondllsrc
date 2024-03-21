@@ -145,6 +145,9 @@
     <ClCompile Include="discord.cpp">
       <Filter>hook_lib\game</Filter>
     </ClCompile>
+    <ClCompile Include="font.cpp">
+      <Filter>hook_lib\game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="common\utils\binary_resource.hpp">
@@ -289,6 +292,9 @@
       <Filter>hook_lib\game</Filter>
     </ClInclude>
     <ClInclude Include="discord_rpc.h">
+      <Filter>hook_lib\game</Filter>
+    </ClInclude>
+    <ClInclude Include="font.hpp">
       <Filter>hook_lib\game</Filter>
     </ClInclude>
   </ItemGroup>
