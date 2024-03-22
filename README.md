@@ -20,4 +20,4 @@ HOW TO USE
 
 To open menu, press F1. Main section is MiniRoyale. Click it. There you can choose Circle Preset (which stays for gas zone location), Execute br_core.cfg (which is VERY IMPORTANT before going in match) and Playlists themselves. IMPORTANT: If you're the hoster, you don't need to Execute br_core.cfg. Just select the playlist! It automatically executes br_core.cfg, so executing it again AFTER choosing playlist can override needed settings. Use Circle Preset 1 to debug bots. Current script version is buggy about bots, so crashes are expected. Remember that if you go too far from hoster (more than 500m), you will fall through map (no collisions). Also remember that if you set your FPS more than 84, your game will crash in no more than 5 minutes.
 
-The script is written with GSC which Call of Duty uses. script.gscbin stays for main Circles Module and can be up to 6 KB. 1816.gscbin stays for all other features and can be up to 47 KB.
+The script is written with GSC which Call of Duty uses. script.gscbin stays for main Circles Module and can be up to 3 KB. 1816.gscbin stays for all other features and can be up to 47 KB.
