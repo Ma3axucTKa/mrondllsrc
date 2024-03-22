@@ -2250,3 +2250,36 @@ enum LocalClientNum_t
 	LOCAL_CLIENT_COUNT = 0x2,
 };
 
+struct lua_State {
+
+};
+
+union GamerProfileDataUnion {
+	__int8 byteVal;
+	bool boolVal;
+	short shortVal;
+	int intVal;
+	float floatVal;
+	const char* stringVal;
+};
+
+enum GamerProfileDataType {
+	TYPE_INVALID = 0,
+	TYPE_BYTE = 1,
+	TYPE_BOOL = 2,
+	TYPE_SHORT = 3,
+	TYPE_INT = 4,
+	TYPE_FLOAT = 5,
+	TYPE_STRING = 6,
+	TYPE_BUFFER = 7,
+	TYPE_FLAG = 8
+};
+
+struct GamerProfileData {
+	GamerProfileDataType type;
+	GamerProfileDataUnion u;
+};
+
+struct MarketingCommsManager {
+
+};

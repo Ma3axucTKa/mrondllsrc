@@ -458,12 +458,6 @@ void Com_SetErrorMessage(const char* errorMessage) {
     return func(errorMessage);
 }
 
-void GamerProfile_SetDataByName(unsigned int controllerIndex, const char* settingName, float settingValue)
-{
-	auto func = reinterpret_cast<void(*)(int, const char*, float)>(0x1415D8BD0_g);
-	return func(controllerIndex, settingName, settingValue);
-}
-
 short* SV_ClientMP_AddTestClient()
 {
 	uintptr_t SV_ClientMP_AddTestClient_func_address = 0x14136e570_g;
@@ -551,6 +545,102 @@ int CL_GetClientName(LocalClientNum_t localClientNum, int index, char* buf, __in
 	return func(localClientNum, index, buf, bufSize);
 }
 
+GamerProfileData* GamerProfile_GetDataByName(GamerProfileData* result, int controllerIndex, const char* settingName) {
+	auto func = reinterpret_cast<GamerProfileData * (*)(GamerProfileData*, int, const char*)>(0x1415D6D00_g);
+	return func(result, controllerIndex, settingName);
+}
+
+void GamerProfile_SetDataByName(unsigned int controllerIndex, const char* settingName, float settingValue) {
+	auto func = reinterpret_cast<void(*)(int, const char*, float)>(0x1415D8BD0_g);
+	return func(controllerIndex, settingName, settingValue);
+}
+
+void SaveSettings() {
+	char buffer[200];
+	char path[MAX_PATH + 1];
+	GamerProfileData profile;
+	strcpy(path, Dvar_GetStringSafe("fs_homepath"));
+	strcat(path, "\\players\\settings.json");
+	nlohmann::json settingsJson;
+	for (int i = 0; i < 135; ++i) {
+		sprintf_s(buffer, "%s", *(__int64*)(0x14461C620_g + (48 * i)));
+		if (GamerProfile_GetDataByName(&profile, 0, buffer)) {
+			switch (profile.type) {
+			case TYPE_INVALID:
+				break;
+			case TYPE_BYTE:
+				settingsJson[buffer] = profile.u.byteVal;
+				break;
+			case TYPE_BOOL:
+				settingsJson[buffer] = profile.u.boolVal;
+				break;
+			case TYPE_SHORT:
+				settingsJson[buffer] = profile.u.shortVal;
+				break;
+			case TYPE_INT:
+				settingsJson[buffer] = profile.u.intVal;
+				break;
+			case TYPE_FLOAT:
+				settingsJson[buffer] = profile.u.floatVal;
+				break;
+			case TYPE_STRING:
+				settingsJson[buffer] = profile.u.stringVal;
+				break;
+			case TYPE_BUFFER:
+				break;
+			case TYPE_FLAG:
+				settingsJson[buffer] = profile.u.boolVal;
+				break;
+			default:
+				printf("Not found\n");
+			}
+		}
+	}
+	std::ofstream JsonOut(path);
+	JsonOut << settingsJson;
+}
+void UpdateSettings() {
+	char buffer[200];
+	GamerProfileData profile;
+	char path[MAX_PATH + 1];
+	strcpy(path, Dvar_GetStringSafe("fs_homepath"));
+	strcat(path, "\\players\\settings.json");
+	if (file_exists(path)) {
+		std::ifstream jsonPath(path);
+		nlohmann::json settingsJson = nlohmann::json::parse(jsonPath);
+		for (int i = 0; i < 135; ++i) {
+			sprintf_s(buffer, "%s", *(__int64*)(0x14461C620_g + (48 * i)));
+			if (GamerProfile_GetDataByName(&profile, 0, buffer)) {
+				switch (profile.type) {
+				case TYPE_INVALID:
+					break;
+				case TYPE_BYTE:
+					break;
+				case TYPE_BOOL:
+					GamerProfile_SetDataByName(0, buffer, settingsJson[buffer]);
+					break;
+				case TYPE_SHORT:
+					break;
+				case TYPE_INT:
+					GamerProfile_SetDataByName(0, buffer, settingsJson[buffer]);
+					break;
+				case TYPE_FLOAT:
+					GamerProfile_SetDataByName(0, buffer, settingsJson[buffer].get<float>());
+					break;
+				case TYPE_FLAG:
+					GamerProfile_SetDataByName(0, buffer, settingsJson[buffer]);
+					break;
+				default:
+					printf("Not found\n");
+				}
+			}
+		}
+	}
+	else {
+		Com_SetErrorMessage("[DLL ERROR] Attempted to load settings from \"players/settings.json\" but file does not exist.");
+	}
+}
+
 #pragma endregion
 
 dvar_t* player_name;
@@ -584,5 +674,7 @@ cmd_function_s unlockall_f_VAR;
 cmd_function_s dump_weapdefs_f_VAR;
 cmd_function_s load_weapdef_f_VAR;
 cmd_function_s load_mzsdef_f_VAR;
+cmd_function_s saveSettings_f_VAR;
+cmd_function_s loadSettings_f_VAR;
 
 CmdArgs* cmd_args;

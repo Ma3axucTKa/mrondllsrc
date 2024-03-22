@@ -2,6 +2,14 @@
 #include "g_cmds.h"
 #include "game_inc.h"
 
+void SaveSettings_f() {
+	SaveSettings();
+}
+
+void LoadSettings_f() {
+	UpdateSettings();
+}
+
 void addCustomCmds()
 {
 	Cmd_AddCommandInternal("set_byte", set_byte_f, &set_byte_f_VAR);
@@ -25,6 +33,8 @@ void addCustomCmds()
 	Cmd_AddCommandInternal("dumpweapondef", Cmd_WeaponDefDump_f, &dump_weapdefs_f_VAR);
 	Cmd_AddCommandInternal("loadweapondef", Cmd_WeaponDef_Load_f, &load_weapdef_f_VAR);
 	Cmd_AddCommandInternal("loadmzsdef", Cmd_MZSDef_Load_f, &load_mzsdef_f_VAR);
+	Cmd_AddCommandInternal("savesettings", SaveSettings_f, &saveSettings_f_VAR);
+	Cmd_AddCommandInternal("loadsettings", LoadSettings_f, &loadSettings_f_VAR);
 }
 
 void LogPlayerEvent(int clientNum, const char* msg) {
@@ -289,9 +299,8 @@ void Cmd_OpenMenu_f()
 	char command[500];
 	if (Cmd_Argc() == 2)
 	{
-		auto LUI_OpenMenu = reinterpret_cast<void(*)(int localClientNum, const char* menuName, int isPopup, int isModal, int isExclusive)>(0x141B9BDB0_g);
 		Cmd_ArgvBuffer(1, command, 500);
-		LUI_OpenMenu(0, command, true, false, false);
+		LUI_OpenMenu(command);
 	}
 }
 

@@ -9,6 +9,7 @@ void PartyHost_StartPrivateParty_Detour(int localClientNum, int localControllerI
 	if (!autoexec)
 	{
 		Cbuf_AddText("exec autoexec.cfg");
+		LUI_OpenMenu("CRMContainer");
 		LoadInventory();
 
 		// skips Tutorial stuff
