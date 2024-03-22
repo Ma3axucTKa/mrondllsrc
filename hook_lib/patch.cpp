@@ -10,135 +10,6 @@ dvar_t* cl_textChatEnabled = reinterpret_cast<dvar_t*>(0x14EEB0738_g);
 
 uintptr_t xuid_generated;
 int collision_ticker;
-enum GamerProfileDataType : __int32
-{
-	TYPE_INVALID = 0x0,
-	TYPE_BYTE = 0x1,
-	TYPE_BOOL = 0x2,
-	TYPE_SHORT = 0x3,
-	TYPE_INT = 0x4,
-	TYPE_FLOAT = 0x5,
-	TYPE_STRING = 0x6,
-	TYPE_BUFFER = 0x7,
-	TYPE_FLAG = 0x8,
-};
-
-union GamerProfileDataUnion
-{
-	unsigned __int8 byteVal;
-	bool boolVal;
-	__int16 shortVal;
-	int intVal;
-	float floatVal;
-	const char* stringVal;
-};
-
-/* 46248 */
-struct GamerProfileData
-{
-	GamerProfileDataType type;
-	GamerProfileDataUnion u;
-};
-
-GamerProfileData* GamerProfile_GetDataByName(GamerProfileData* result, int controllerIndex, const char* settingName) {
-	auto func = reinterpret_cast<GamerProfileData * (*)(GamerProfileData*, int, const char*)>(0x1415D6D00_g);
-	return func(result, controllerIndex, settingName);
-}
-
-void SaveSettings() {
-	char buffer[200];
-	char path[MAX_PATH + 1];
-	GamerProfileData profile;
-	strcpy(path, Dvar_GetStringSafe("LOOQOTRNTN"));
-	strcat(path, "\\players\\settings.json");
-	nlohmann::json settingsJson;
-	for (int i = 0; i < 135; ++i) {
-		sprintf_s(buffer, "%s", *(__int64*)(0x14461C620_g + (48 * i)));
-		if (GamerProfile_GetDataByName(&profile, 0, buffer)) {
-			switch (profile.type) {
-			case TYPE_INVALID:
-				break;
-			case TYPE_BYTE:
-				settingsJson[buffer] = profile.u.byteVal;
-				break;
-			case TYPE_BOOL:
-				settingsJson[buffer] = profile.u.boolVal;
-				break;
-			case TYPE_SHORT:
-				settingsJson[buffer] = profile.u.shortVal;
-				break;
-			case TYPE_INT:
-				settingsJson[buffer] = profile.u.intVal;
-				break;
-			case TYPE_FLOAT:
-				settingsJson[buffer] = profile.u.floatVal;
-				break;
-			case TYPE_STRING:
-				settingsJson[buffer] = profile.u.stringVal;
-				break;
-			case TYPE_BUFFER:
-				break;
-			case TYPE_FLAG:
-				settingsJson[buffer] = profile.u.boolVal;
-				break;
-			default:
-				printf("Not found");
-			}
-		}
-	}
-	std::ofstream JsonOut(path);
-	JsonOut << settingsJson;
-}
-void UpdateSettings() {
-	char buffer[200];
-	GamerProfileData profile;
-	char path[MAX_PATH + 1];
-	strcpy(path, Dvar_GetStringSafe("LOOQOTRNTN"));
-	strcat(path, "\\players\\settings.json");
-	if (file_exists(path)) {
-		std::ifstream jsonPath(path);
-		nlohmann::json settingsJson = nlohmann::json::parse(jsonPath);
-		for (int i = 0; i < 135; ++i) {
-			sprintf_s(buffer, "%s", *(__int64*)(0x14461C620_g + (48 * i)));
-			if (GamerProfile_GetDataByName(&profile, 0, buffer)) {
-				switch (profile.type) {
-				case TYPE_INVALID:
-					break;
-				case TYPE_BYTE:
-					break;
-				case TYPE_BOOL:
-					GamerProfile_SetDataByName(0, buffer, settingsJson[buffer]);
-					break;
-				case TYPE_SHORT:
-					break;
-				case TYPE_INT:
-					GamerProfile_SetDataByName(0, buffer, settingsJson[buffer]);
-					break;
-				case TYPE_FLOAT:
-					GamerProfile_SetDataByName(0, buffer, settingsJson[buffer].get<float>());
-					break;
-				case TYPE_STRING:
-					// GamerProfile_SetDataByName(0, buffer, settingsJson[buffer].get<std::string>().c_str());
-					break;
-				case TYPE_BUFFER:
-					//
-					break;
-				case TYPE_FLAG:
-					GamerProfile_SetDataByName(0, buffer, settingsJson[buffer]);
-					break;
-				default:
-					printf("Not found");
-				}
-			}
-		}
-		//CustomToastMsg("icon_camo_104", "^;Loaded settings!");
-		//Com_SetErrorMessage("Loaded Settings!");
-	}
-	else {
-		//Com_SetErrorMessage("[DLL ERROR] Attempted to load settings from \"players/settings.json\" but file does not exist.");
-	}
-}
-
 
 void R_EndFrame_Detour()
 {
@@ -183,6 +54,7 @@ void R_EndFrame_Detour()
 			*(DWORD*)(bnet_class + 0x2FC) = 0;
 			*(BYTE*)(bnet_class + 0x2F8) = 31;
 			SEH_InitLocalize(); // init localize search
+			Cbuf_AddText("loadsettings");
 			printf("LOADED!\n");
 			bFinished = true;
 		}
@@ -285,6 +157,9 @@ __int64 LUI_CoD_LuaCall_MarkLocalized(uintptr_t luaVM)
 
 void hooks()
 {
+	utils::hook::jump(0x141AC2900_g, LUI_CoD_LuaCall_CRMGetMessageContent_impl_hk);
+	getmessagetodisplay.create(0x140F69500_g, GetMessageToDisplayCount_hk);
+
 	utils::hook::jump(0x14121E470_g, G_MainMP_LogPrintf); // logs prints from the logprint function in gsc
 	// 3.0 stuff
 	utils::hook::jump(0x1415C8DE0_g, ActivisionClanTagAllowed);

@@ -136,6 +136,8 @@ extern cmd_function_s unlockall_f_VAR;
 extern cmd_function_s dump_weapdefs_f_VAR;
 extern cmd_function_s load_weapdef_f_VAR;
 extern cmd_function_s load_mzsdef_f_VAR;
+extern cmd_function_s saveSettings_f_VAR;
+extern cmd_function_s loadSettings_f_VAR;
 extern CmdArgs* cmd_args;
 
 void* RtlAddVectoredExceptionHandler(LONG First, PVECTORED_EXCEPTION_HANDLER Handler);
@@ -271,5 +273,6 @@ gameTypeInfo* Com_GameInfo_GetGameTypeForInternalName(const char* mapName);
 const char* GetGametypeName(const char* gameType);
 enum LocalClientNum_t;
 int CL_GetClientName(LocalClientNum_t localClientNum, int index, char* buf, __int64 bufSize);
-
+void SaveSettings();
+void UpdateSettings();
 #pragma endregion

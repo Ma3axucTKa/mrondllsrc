@@ -1,6 +1,6 @@
 #include "lui_cod.h"
 #include "game_inc.h"
-
+#include "addr_utils.hpp"
 void LUI_CoD_RegisterDvars_Detour()
 {
 	printf("registering lui dvars\n");
@@ -44,3 +44,106 @@ void LUI_CoD_LuaCall_EngineNotifyServer_Detour(uintptr_t luaVM) {
 	lui_cod_luacall_enginenotifyserver_detour_impl.stub<void>(luaVM);
 }
 
+void lua_createtable(uintptr_t L, int narray, int nrec) {
+	auto func = reinterpret_cast<void (*)(uintptr_t, int, int)>(0x1420833B0_g);
+	func(L, narray, nrec);
+}
+
+float lua_tonumber32(uintptr_t luaVM, int index) {
+	auto func = reinterpret_cast<float(*)(uintptr_t, int)>(0x1419CE9C0_g);
+	return func(luaVM, index);
+}
+
+void LUI_BeginTable1(const char* key, uintptr_t luaVM)
+{
+	auto func = reinterpret_cast<void(*)(const char*, uintptr_t)>(0x1419BCF00_g);
+	func(key, luaVM);
+}
+
+void LuaShared_SetTableString(const char* key, const char* value, uintptr_t luaVM)
+{
+	auto func = reinterpret_cast<void(*)(const char*, const char*, uintptr_t)>(0x1419CE5A0_g);
+	func(key, value, luaVM);
+}
+
+void LuaShared_SetTableInt(const char* key, __int64 value, uintptr_t luaVM)
+{
+	auto func = reinterpret_cast<void(*)(const char*, __int64, uintptr_t)>(0x1419CE4F0_g);
+	func(key, value, luaVM);
+}
+
+void LUI_EndTable(lua_State* luaVM) {
+	auto func = reinterpret_cast<void(*)(lua_State*)>(0x1419BDAC0_g);
+	func(luaVM);
+}
+
+void lua_pushnil(uintptr_t L) {
+	auto func = reinterpret_cast<void(*)(uintptr_t)>(0x1420840E0_g);
+	func(L);
+}
+
+void LUI_OpenMenu(const char* menu) {
+	auto func = reinterpret_cast<void(*)(int localClientNum, const char* menuName, int isPopup, int isModal, int isExclusive)>(0x141B9BDB0_g);
+	func(0, menu, 0, 0, 0);
+}
+
+unsigned int GetMessageToDisplayCount_hk(MarketingCommsManager* a1, int messageType) {
+	unsigned int temp = getmessagetodisplay.stub<unsigned int>(a1, messageType);
+	if (messageType == 8) return 1;
+	return temp;
+}
+
+__int64 LUI_CoD_LuaCall_CRMGetMessageContent_impl_hk(uintptr_t luaVM) {
+
+	int controllerIndex = (int)lua_tonumber32(luaVM, 1);
+	int locationID = (int)lua_tonumber32(luaVM, 2);
+	int messageIndex = (int)lua_tonumber32(luaVM, 3);
+
+	//printf("Controller: %d, location: %d, messageIndex: %d\n", controllerIndex, locationID, messageIndex);
+
+	// might move to json in future idk
+	if (locationID == 8 && !messageIndex) {
+		// General Info (version etc)
+		lua_createtable(luaVM, 0, 0);
+		LUI_BeginTable1("message", luaVM);
+		LuaShared_SetTableString("message_id", "1", luaVM);
+		LuaShared_SetTableString("title", "MRON 3.0 Info", luaVM);
+		LuaShared_SetTableString("content_short", "Welcome to MRON!\nWebsite: https://www.mzsmods.fun/maineng", luaVM);
+		LuaShared_SetTableString("action", "goto_ingame", luaVM);
+		LuaShared_SetTableString("content_long", "Welcome to MRON", luaVM);
+		LuaShared_SetTableString("layout_type", "0", luaVM);
+
+		//LuaShared_SetTableString("popup_image", "mw_store_billboard_bronze_knight", (uintptr_t)L);
+		//LuaShared_SetTableString("image", "mw_store_billboard_bronze_knight", (uintptr_t)L);
+		//LuaShared_SetTableString("action_location", "barracks", (uintptr_t)L);
+
+		LuaShared_SetTableString("checksum", "12345678", luaVM);
+		LuaShared_SetTableInt("location_id", 1, luaVM);
+		LuaShared_SetTableInt("message_index", 0, luaVM);
+		LUI_EndTable((lua_State*)luaVM);
+	}
+	else if (locationID == 8 && messageIndex == 1) {
+		// Patch Notes section
+		lua_createtable(luaVM, 0, 0);
+		LUI_BeginTable1("message", luaVM);
+		LuaShared_SetTableString("message_id", "1", luaVM);
+		LuaShared_SetTableString("title", "MRON 3.0 Patch Notes", luaVM);
+		LuaShared_SetTableString("content_short", "Some changes here or something", luaVM);
+		LuaShared_SetTableString("action", "goto_ingame", luaVM);
+		LuaShared_SetTableString("content_long", "Welcome to MRON", luaVM);
+		LuaShared_SetTableString("layout_type", "0", luaVM);
+
+		//LuaShared_SetTableString("popup_image", "mw_store_billboard_bronze_knight", (uintptr_t)L);
+		//LuaShared_SetTableString("image", "mw_store_billboard_bronze_knight", (uintptr_t)L);
+		//LuaShared_SetTableString("action_location", "barracks", (uintptr_t)L);
+
+		LuaShared_SetTableString("checksum", "12345679", luaVM);
+		LuaShared_SetTableInt("location_id", 1, luaVM);
+		LuaShared_SetTableInt("message_index", 1, luaVM);
+		LUI_EndTable((lua_State*)luaVM);
+	}
+	else {
+		lua_pushnil(luaVM);
+	}
+	return 1;
+}
