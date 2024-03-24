@@ -12,3 +12,6 @@ __int64 LUI_CoD_LuaCall_CRMGetMessageContent_impl_hk(uintptr_t luaVM);
 void LUI_OpenMenu(const char* menu);
 unsigned int GetMessageToDisplayCount_hk(MarketingCommsManager* a1, int messageType);
 __int64 LUI_CoD_LuaCall_GetServerData_hk(uintptr_t luaVM);
+int LUI_CoD_LuaCall_GetSeasonXP(uintptr_t luaVM);
+int LUI_CoD_LuaCall_GetPlayerXP(uintptr_t luaVM);
+int LUI_CoD_LuaCall_GetSeasonRank(uintptr_t luaVM);

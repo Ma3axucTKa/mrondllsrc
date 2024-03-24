@@ -84,6 +84,11 @@ void lua_pushnil(uintptr_t L) {
 	func(L);
 }
 
+void lua_pushnumber(uintptr_t L, long double n) {
+	auto func = reinterpret_cast<void(*)(uintptr_t, long double n)>(0x142084100_g);
+	func(L, n);
+}
+
 void LUI_OpenMenu(const char* menu) {
 	auto func = reinterpret_cast<void(*)(int localClientNum, const char* menuName, int isPopup, int isModal, int isExclusive)>(0x141B9BDB0_g);
 	func(0, menu, 0, 0, 0);
@@ -177,5 +182,20 @@ __int64 LUI_CoD_LuaCall_GetServerData_hk(uintptr_t luaVM) { // fixes map image n
 	auto data = &localServers[indexes[index]];
 	lua_pushstring(luaVM, data->mapName);
 
+	return 1;
+}
+
+int LUI_CoD_LuaCall_GetSeasonRank(uintptr_t luaVM) {
+	lua_pushnumber(luaVM, 155);
+	return 1;
+}
+
+int LUI_CoD_LuaCall_GetPlayerXP(uintptr_t luaVM) {
+	lua_pushnumber(luaVM, 999999999);
+	return 1;
+}
+
+int LUI_CoD_LuaCall_GetSeasonXP(uintptr_t luaVM) {
+	lua_pushnumber(luaVM, 999999999);
 	return 1;
 }
