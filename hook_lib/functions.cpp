@@ -647,6 +647,7 @@ dvar_t* print_debug;
 dvar_t* weap_impactType;
 dvar_t* weap_dismembermentAlwaysEnabled;
 dvar_t* g_dumpScripts;
+dvar_t* unlockAllItems;
 
 cmd_function_s set_byte_f_VAR;
 cmd_function_s set_short_f_VAR;
