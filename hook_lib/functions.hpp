@@ -114,6 +114,7 @@ extern dvar_t* print_debug;
 extern dvar_t* weap_impactType;
 extern dvar_t* weap_dismembermentAlwaysEnabled;
 extern dvar_t* g_dumpScripts;
+extern dvar_t* unlockAllItems;
 
 extern cmd_function_s set_byte_f_VAR;
 extern cmd_function_s set_short_f_VAR;

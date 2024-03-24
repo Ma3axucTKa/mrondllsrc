@@ -157,6 +157,10 @@ __int64 LUI_CoD_LuaCall_MarkLocalized(uintptr_t luaVM)
 
 void hooks()
 {
+	utils::hook::jump(0x141059410_g, LUI_CoD_LuaCall_GetSeasonXP);
+	utils::hook::jump(0x141059500_g, LUI_CoD_LuaCall_GetSeasonRank);
+	utils::hook::jump(0x1410592B0_g, LUI_CoD_LuaCall_GetPlayerXP);
+	utils::hook::jump(0x1419E1680_g, LUI_CoD_LuaCall_GetServerData_hk);
 	utils::hook::jump(0x141AC2900_g, LUI_CoD_LuaCall_CRMGetMessageContent_impl_hk);
 	getmessagetodisplay.create(0x140F69500_g, GetMessageToDisplayCount_hk);
 

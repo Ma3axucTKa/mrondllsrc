@@ -9,12 +9,16 @@ void addCustomDvars()
 dvar_t* Dvar_RegisterBool_Detour(const char* dvarName, bool value, unsigned int flags, const char* description)
 {
 	if (strcmp(dvarName, "LSTQOKLTRN") == 0) {
-		printf("dvar registered!\n");
+		//printf("dvar registered!\n");
 		value = true;
 	}
 	if (strcmp(dvarName, "MPSSOTQQPM") == 0) {
-		printf("dvar registered!\n");
+		//printf("dvar registered!\n");
 		value = true;
+	}
+	if (strcmp(dvarName, "LNTOKPTKS") == 0) {
+		// lui_cod_points_enabled
+		value = false;
 	}
 	dvar_t* ret = dvar_registerbool.stub<dvar_t*>(dvarName, value, flags, description);
 	return ret;

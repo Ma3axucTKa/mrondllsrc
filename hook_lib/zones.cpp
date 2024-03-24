@@ -32,11 +32,11 @@ XAssetHeader DB_FindXAssetHeader_Detour(XAssetType type, const char* givenName, 
 			font.seekg(0, std::ios::beg);
 			
 			
-			char* test = (char*)malloc(size);
+			char* allocated = (char*)malloc(size);
 			
-			font.read(test, size);
+			font.read(allocated, size);
 			temp.ttfDef->fileLen = size;
-			temp.ttfDef->file = test;
+			temp.ttfDef->file = allocated;
 			printf("Loaded custom font for: %s\n", givenName);
 		}
 	}

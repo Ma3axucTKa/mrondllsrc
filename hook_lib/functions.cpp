@@ -302,7 +302,6 @@ void CG_DrawBones(int entIndex, uintptr_t ent, const float* color) {
 
 bool CheatsOk(int entNum) {
 	SvClient* ms_clients = *reinterpret_cast<SvClient**>(0x14E17F690_g + (8 * entNum));
-	uintptr_t client = g_entities[entNum].get<uintptr_t>(0x150);
 	if (sv_cheats->current.enabled) {
 		return true;
 	}
@@ -318,7 +317,7 @@ void Cmd_Noclip_f(int entNum)
 	SvClient* ms_clients = *reinterpret_cast<SvClient**>(0x14E17F690_g + (8 * entNum));
 	gclient_s* client = g_entities[entNum].client;
 	if (client) {
-		int v6 = client->flags;
+		int v6 = 0;
 		if ((client->flags & 1) != 0) {
 			v6 = client->flags & 0xFFFFFFFE;
 			ms_clients->SendServerCommand(1, "f \"Noclip: ^1OFF\"");
@@ -615,29 +614,25 @@ void UpdateSettings() {
 				case TYPE_INVALID:
 					break;
 				case TYPE_BYTE:
-					break;
 				case TYPE_BOOL:
-					GamerProfile_SetDataByName(0, buffer, settingsJson[buffer]);
-					break;
 				case TYPE_SHORT:
-					break;
 				case TYPE_INT:
+				case TYPE_FLAG:
 					GamerProfile_SetDataByName(0, buffer, settingsJson[buffer]);
 					break;
 				case TYPE_FLOAT:
 					GamerProfile_SetDataByName(0, buffer, settingsJson[buffer].get<float>());
 					break;
-				case TYPE_FLAG:
-					GamerProfile_SetDataByName(0, buffer, settingsJson[buffer]);
-					break;
 				default:
-					printf("Not found\n");
+					printf("Not found - %s\n", buffer);
 				}
 			}
 		}
 	}
 	else {
-		Com_SetErrorMessage("[DLL ERROR] Attempted to load settings from \"players/settings.json\" but file does not exist.");
+		printf("Settings not found, creating new settings json.\n");
+		SaveSettings();
+		//Com_SetErrorMessage("[DLL ERROR] Attempted to load settings from \"players/settings.json\" but file does not exist.");
 	}
 }
 
@@ -652,6 +647,7 @@ dvar_t* print_debug;
 dvar_t* weap_impactType;
 dvar_t* weap_dismembermentAlwaysEnabled;
 dvar_t* g_dumpScripts;
+dvar_t* unlockAllItems;
 
 cmd_function_s set_byte_f_VAR;
 cmd_function_s set_short_f_VAR;

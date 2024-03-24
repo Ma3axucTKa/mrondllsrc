@@ -4,8 +4,10 @@
 
 void CG_DrawWaterMark()
 {
-	float white[4] = { 1.0f, 1.0f, 1.0f, 0.2f };
-	// CL_DrawText(0x14EF2DEA0_g, "Fuck off activision you cunts", 0x7FFFFFFF, *reinterpret_cast<uintptr_t*>(0x14EEB0C68_g), 0, 400.0f, 1, 1, 0.80000001, 0.80000001, white, 7);
+	float white[4] = { 1.0f, 1.0f, 1.0f, 0.075f };
+	float red[4] = { 1.0f, 0.0f, 0.0f, 0.5f };
+	float blue[4] = { 0.5f, 0.5f, 1.5f, 1.5f };
+	CL_DrawText(0x14EF2DEA0_g, "MRON S1", 0x7FFFFFFF, *reinterpret_cast<uintptr_t*>(0x14EEB0C68_g), 0, 480, 1, 1, 0.45000001, 0.45000001, blue, 7);
 }
 
 void CL_ScreenMP_DrawOverlay_Detour()
@@ -19,11 +21,7 @@ void CL_ScreenMP_DrawOverlay_Detour()
 	DevGui_Draw(0);
 
 	if (show_watermark->current.enabled) {
-		CG_DrawWaterMark();
+		CG_DrawWaterMark();	
 	}
 
-	float white[4] = { 1.0f, 1.0f, 1.0f, 0.075f };
-	float red[4] = { 1.0f, 0.0f, 0.0f, 0.5f };
-	float blue[4] = { 0.5f, 0.5f, 1.5f, 1.5f };
-	CL_DrawText(0x14EF2DEA0_g, "MRON S1", 0x7FFFFFFF, *reinterpret_cast<uintptr_t*>(0x14EEB0C68_g), 0, 480, 1, 1, 0.45000001, 0.45000001, blue, 7);
 }
