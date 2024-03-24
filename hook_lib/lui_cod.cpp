@@ -107,7 +107,7 @@ __int64 LUI_CoD_LuaCall_CRMGetMessageContent_impl_hk(uintptr_t luaVM) {
 		lua_createtable(luaVM, 0, 0);
 		LUI_BeginTable1("message", luaVM);
 		LuaShared_SetTableString("message_id", "1", luaVM);
-		LuaShared_SetTableString("title", "MRON 3.0 Info", luaVM);
+		LuaShared_SetTableString("title", "MRON 3 Info", luaVM);
 		LuaShared_SetTableString("content_short", "^5Welcome to MRON!\nWebsite: www.mzsmods.fun", luaVM);
 		LuaShared_SetTableString("action", "goto_ingame", luaVM);
 		LuaShared_SetTableString("content_long", "Welcome to MRON", luaVM);
@@ -127,8 +127,8 @@ __int64 LUI_CoD_LuaCall_CRMGetMessageContent_impl_hk(uintptr_t luaVM) {
 		lua_createtable(luaVM, 0, 0);
 		LUI_BeginTable1("message", luaVM);
 		LuaShared_SetTableString("message_id", "1", luaVM);
-		LuaShared_SetTableString("title", "MRON 3.1.0 Patch Notes", luaVM);
-		LuaShared_SetTableString("content_short", "^3MRON 3.1.0 March 22\n^5- Added Custom Fonts\n- Added All Settings Saving\n- Added Russian Localization\n- Open Alpha of Dynamic Plunder mode\n- Bugfixes for circles\n \n^3MRON 0.5 Release February 17\n^5- Added Main Circles Module\n- Added Respawns System", luaVM);
+		LuaShared_SetTableString("title", "MRON Patch Notes", luaVM);
+		LuaShared_SetTableString("content_short", "^3MRON 3.1.8 March 23\n^5- Added Custom Fonts\n- NEW: Custom Airstrike\n Has 100% chance to appear in match\n Appears one time in random moment\n- Added All Settings Saving\n- Added Russian Localization\n- Open Alpha of Dynamic Plunder mode\n- Bugfixes for circles\n \n^3MRON 0.5 Release February 17\n^5- Added Main Circles Module\n- Added Respawns System", luaVM);
 		LuaShared_SetTableString("action", "goto_ingame", luaVM);
 		LuaShared_SetTableString("content_long", "Welcome to MRON", luaVM);
 		LuaShared_SetTableString("layout_type", "0", luaVM);
