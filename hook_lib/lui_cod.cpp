@@ -147,3 +147,33 @@ __int64 LUI_CoD_LuaCall_CRMGetMessageContent_impl_hk(uintptr_t luaVM) {
 	}
 	return 1;
 }
+
+__int64 lua_tointeger32(uintptr_t luaVM, int index) {
+	auto func = reinterpret_cast<__int64(*)(uintptr_t, int)>(0x1419B78C0_g);
+	return func(luaVM, index);
+}
+
+// function is only used for getting the map name from server table, shouldn't cause any issues
+__int64 LUI_CoD_LuaCall_GetServerData_hk(uintptr_t luaVM) { // fixes map image not showing for servers
+	int controller;
+	int index;
+	int column;
+
+	controller = lua_tointeger32(luaVM, 1);
+	index = lua_tointeger32(luaVM, 2);
+	column = lua_tointeger32(luaVM, 3);
+	int numlocalservers = *(int*)(0x14EEB1220_g);
+	ClServerInfo* localServers = (ClServerInfo*)(0x14EEB1224_g);
+	int* indexes = (int*)(0x152C46A8C_g);
+
+	if (index > numlocalservers)
+	{
+		printf("[%s] Index exceeded number of local servers %d/%d\n", __FUNCTION__, index, numlocalservers);
+		lua_pushstring(luaVM, "");
+		return 1;
+	}
+	auto data = &localServers[indexes[index]];
+	lua_pushstring(luaVM, data->mapName);
+
+	return 1;
+}

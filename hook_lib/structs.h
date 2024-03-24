@@ -2283,3 +2283,49 @@ struct GamerProfileData {
 struct MarketingCommsManager {
 
 };
+
+struct bdSecurityID
+{
+	char ab[8];
+};
+
+struct bdSecurityKey
+{
+	char ab[16];
+};
+
+struct XSECURITY_INFO
+{
+	bdSecurityID m_id;
+	bdSecurityKey m_key;
+};
+
+struct XNADDR
+{
+	char addrBuff[84];
+};
+
+struct XSESSION_INFO
+{
+	XNADDR m_address;
+	XSECURITY_INFO m_security;
+};
+
+struct ClServerInfo
+{
+	XNADDR xnaddr;
+	XSECURITY_INFO xninfo;
+	netadr_t adr;
+	char clients;
+	char maxClients;
+	char dirty;
+	char requestCount;
+	__int16 minPing;
+	__int16 maxPing;
+	__int16 ping;
+	bool isDedicated;
+	char isLobby;
+	char hostName[36];
+	char mapName[36];
+	char gameType[16];
+};

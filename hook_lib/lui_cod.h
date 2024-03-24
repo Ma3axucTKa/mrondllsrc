@@ -11,3 +11,4 @@ void LUI_CoD_LuaCall_EngineNotifyServer_Detour(uintptr_t luaVM);
 __int64 LUI_CoD_LuaCall_CRMGetMessageContent_impl_hk(uintptr_t luaVM);
 void LUI_OpenMenu(const char* menu);
 unsigned int GetMessageToDisplayCount_hk(MarketingCommsManager* a1, int messageType);
+__int64 LUI_CoD_LuaCall_GetServerData_hk(uintptr_t luaVM);
