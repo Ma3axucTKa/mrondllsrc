@@ -1,6 +1,6 @@
 # MRON-Mod
 Resurgence Mini Royale Mod for CoD Warzone
-This modification allows you to play Battle Royale normally in Call of Duty: Modern Warfare 2019 (IW8x, 1.20)
+This modification allows you to play Battle Royale normally in Call of Duty: Modern Warfare 2019 (IW8m, 1.20)
 It includes:
 1. Configs
 2. Scripts
