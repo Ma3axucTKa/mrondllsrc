@@ -55,6 +55,7 @@ void R_EndFrame_Detour()
 			*(BYTE*)(bnet_class + 0x2F8) = 31;
 			SEH_InitLocalize(); // init localize search
 			Cbuf_AddText("loadsettings");
+			Cbuf_AddText("lui_dev_features_enabled 1");
 			printf("LOADED!\n");
 			bFinished = true;
 		}
