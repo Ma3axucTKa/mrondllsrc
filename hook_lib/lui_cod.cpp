@@ -135,7 +135,7 @@ __int64 LUI_CoD_LuaCall_CRMGetMessageContent_impl_hk(uintptr_t luaVM) {
 		LUI_BeginTable1("message", luaVM);
 		LuaShared_SetTableString("message_id", "1", luaVM);
 		LuaShared_SetTableString("title", "MRON Patch Notes", luaVM);
-		LuaShared_SetTableString("content_short", "^3MRON 3.1.8 March 23\n^5- Added Custom Fonts\n- NEW: Custom Airstrike\n Has 100% chance to appear in match\n Appears one time in random moment\n- Added All Settings Saving\n- Added Russian Localization\n- Open Alpha of Dynamic Plunder mode\n- Bugfixes for circles\n \n^3MRON 0.5 Release February 17\n^5- Added Main Circles Module\n- Added Respawns System", luaVM);
+		LuaShared_SetTableString("content_short", "^3MRON 4.0 June XX\n^1MRON Season 2 Update\n^5- NEW: Drones Attack\n^5Appears when anyone uses Directional UAV\n^5Has 100% chance to appear\n^5- Added automatization for settings saving\n^5- Added new localization strings\n^5- Opened BETA for BR Classic Mode\n^5- Bugfixes for Circles Randomization\n^5- NEW: Custom Dynamic Zones\n^5Select 4 circle zones in F1 menu and press Enable\n^5- Fixed a lot of in-code bugs\n^5- Reworked kill-rewards\n^5- Added ability to select kill count for DMZ Royale Nuke\n^5- Added Armor, DMG Display and StimBoostV2 to MRONMultiplayer Menu\n", luaVM);
 		LuaShared_SetTableString("action", "goto_ingame", luaVM);
 		LuaShared_SetTableString("content_long", "Welcome to MRON", luaVM);
 		LuaShared_SetTableString("layout_type", "0", luaVM);
