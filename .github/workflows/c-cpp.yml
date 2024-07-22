@@ -22,7 +22,7 @@ jobs:
           vs-version: 'latest'
 
       - name: Restore NuGet packages
-        run: nuget restore YourSolution.sln
+        run: nuget restore hook_lib.sln
 
       - name: Build solution
         run: msbuild hook_lib.sln /p:Configuration=Release
