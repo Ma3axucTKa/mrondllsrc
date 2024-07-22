@@ -1,23 +1,35 @@
-name: C/C++ CI
+name: Build DLL
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
   pull_request:
-    branches: [ "main" ]
+    branches:
+      - main
 
 jobs:
   build:
-
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - name: configure
-      run: ./configure
-    - name: make
-      run: make
-    - name: make check
-      run: make check
-    - name: make distcheck
-      run: make distcheck
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Visual Studio
+        uses: microsoft/setup-msbuild@v1
+        with:
+          vs-version: 'latest'
+
+      - name: Restore NuGet packages
+        run: nuget restore YourSolution.sln
+
+      - name: Build solution
+        run: msbuild YourSolution.sln /p:Configuration=Release
+
+      - name: Archive DLL
+        uses: actions/upload-artifact@v3
+        with:
+          name: dll
+          path: path/to/your/output/Directory/YourDll.dll
+
