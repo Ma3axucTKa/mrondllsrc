@@ -25,7 +25,7 @@ jobs:
         run: nuget restore YourSolution.sln
 
       - name: Build solution
-        run: msbuild YourSolution.sln /p:Configuration=Release
+        run: msbuild hook_lib.sln /p:Configuration=Release
 
       - name: Archive DLL
         uses: actions/upload-artifact@v3
