@@ -19,7 +19,7 @@ jobs:
       - name: Set up Visual Studio
         uses: microsoft/setup-msbuild@v1
         with:
-          vs-version: 'latest'
+          vs-version: '17.5.3'
 
       - name: Restore NuGet packages
         run: nuget restore hook_lib.sln
@@ -31,5 +31,5 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: dll
-          path: path/to/your/output/Directory/YourDll.dll
-
+          path: |
+            hook_lib.dll
